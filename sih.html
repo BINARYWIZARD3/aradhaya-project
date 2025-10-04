@@ -1,0 +1,1025 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ARADHYA - Complete AI-Powered Pilgrimage Solution</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            box-sizing: border-box;
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .temple-card {
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+        
+        .temple-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        
+        .pulse-dot {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        .crowd-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 8px;
+        }
+        
+        .low { background-color: #10b981; }
+        .medium { background-color: #f59e0b; }
+        .high { background-color: #ef4444; }
+        
+        .notification {
+            animation: slideIn 0.5s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        .chart-bar {
+            transition: height 0.5s ease;
+        }
+        
+        .modal {
+            backdrop-filter: blur(10px);
+        }
+        
+        .cctv-feed {
+            background: linear-gradient(45deg, #1a1a1a, #2d2d2d);
+            border: 2px solid #00ff00;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .cctv-feed::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #00ff00, transparent);
+            animation: scan 2s linear infinite;
+        }
+        
+        @keyframes scan {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+        
+        .traffic-light {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: inline-block;
+            margin: 2px;
+        }
+        
+        .red-light { background-color: #ef4444; }
+        .yellow-light { background-color: #f59e0b; }
+        .green-light { background-color: #10b981; }
+        
+        .weather-widget {
+            background: linear-gradient(135deg, #74b9ff, #0984e3);
+        }
+        
+        .festival-alert {
+            background: linear-gradient(135deg, #fd79a8, #e84393);
+            animation: festivalPulse 3s ease-in-out infinite;
+        }
+        
+        @keyframes festivalPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        @keyframes emergencyFlash {
+            0%, 100% { background-color: #dc2626; }
+            50% { background-color: #b91c1c; }
+        }
+        
+        .emergency-protocol {
+            background: linear-gradient(135deg, #dc2626, #991b1b);
+            border: 2px solid #fca5a5;
+            animation: emergencyPulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes emergencyPulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+            50% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans">
+    <!-- Header -->
+    <header class="gradient-bg text-white shadow-lg">
+        <div class="container mx-auto px-4 py-6">
+            <div class="flex items-center justify-between flex-wrap gap-4">
+                <div class="flex items-center space-x-3">
+                    <div class="w-12 h-12 bg-white rounded-lg p-1 shadow-md">
+                        <svg viewBox="0 0 100 100" class="w-full h-full">
+                            <!-- Gujarat State Map Outline -->
+                            <path d="M20,30 L25,25 L35,20 L45,18 L55,20 L65,25 L75,30 L80,40 L85,50 L80,60 L75,70 L70,75 L60,80 L50,82 L40,80 L30,75 L25,70 L20,60 L15,50 L20,40 Z" 
+                                  fill="#ff6b35" stroke="#fff" stroke-width="2"/>
+                            <!-- Somnath Temple Location -->
+                            <circle cx="25" cy="65" r="3" fill="#ffd700" stroke="#fff" stroke-width="1"/>
+                            <!-- Dwarka Temple Location -->
+                            <circle cx="15" cy="45" r="3" fill="#ffd700" stroke="#fff" stroke-width="1"/>
+                            <!-- Ambaji Temple Location -->
+                            <circle cx="55" cy="25" r="3" fill="#ffd700" stroke="#fff" stroke-width="1"/>
+                            <!-- Pavagadh Temple Location -->
+                            <circle cx="45" cy="50" r="3" fill="#ffd700" stroke="#fff" stroke-width="1"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h1 class="text-2xl font-bold">ARADHYA</h1>
+                        <p class="text-blue-100">Complete AI-Powered Pilgrimage Solution</p>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-2 flex-wrap">
+                    <button id="registerBtn" class="bg-purple-500 hover:bg-purple-600 px-3 py-2 rounded-lg font-semibold transition-colors text-sm">
+                        👤 Register
+                    </button>
+                    <button id="darshanFormBtn" class="bg-orange-500 hover:bg-orange-600 px-3 py-2 rounded-lg font-semibold transition-colors text-sm">
+                        🎫 Darshan Form
+                    </button>
+                    <button id="loginBtn" class="bg-blue-500 hover:bg-blue-600 px-3 py-2 rounded-lg font-semibold transition-colors text-sm">
+                        🔐 Login
+                    </button>
+                    <button id="trafficBtn" class="bg-yellow-500 hover:bg-yellow-600 px-3 py-2 rounded-lg font-semibold transition-colors text-sm">
+                        🚦 Traffic
+                    </button>
+                    <button id="chatbotBtn" class="bg-green-500 hover:bg-green-600 px-3 py-2 rounded-lg font-semibold transition-colors text-sm">
+                        🤖 AI Chat
+                    </button>
+                    <button id="emergencyBtn" class="bg-red-500 hover:bg-red-600 px-3 py-2 rounded-lg font-semibold transition-colors text-sm">
+                        🚨 Emergency
+                    </button>
+                    <button id="emergencyContactsBtn" class="bg-orange-500 hover:bg-orange-600 px-3 py-2 rounded-lg font-semibold transition-colors text-sm">
+                        📞 Contacts
+                    </button>
+                    <div class="text-right">
+                        <div class="text-xs opacity-90">Live Status</div>
+                        <div id="currentTime" class="font-semibold text-sm"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Festival Alert Banner -->
+    <div id="festivalBanner" class="festival-alert text-white text-center py-3 px-4">
+        <div class="flex items-center justify-center space-x-2">
+            <span class="text-2xl">🎉</span>
+            <span class="font-bold">FESTIVAL ALERT: Navratri - Expected 5x crowd surge! Plan your visit accordingly.</span>
+            <button id="closeFestivalBanner" class="ml-4 text-white hover:text-gray-200">✕</button>
+        </div>
+    </div>
+
+    <!-- Emergency Crowd Surge Alert -->
+    <div id="emergencyCrowdAlert" class="bg-red-600 text-white text-center py-4 px-4 hidden" style="animation: emergencyFlash 1s infinite;">
+        <div class="flex items-center justify-center space-x-3">
+            <span class="text-3xl animate-pulse">🚨</span>
+            <div>
+                <div class="font-bold text-lg">EMERGENCY CROWD SURGE DETECTED!</div>
+                <div class="text-sm">Immediate crowd control measures activated. Please follow staff instructions.</div>
+            </div>
+            <button id="closeEmergencyAlert" class="ml-4 text-white hover:text-gray-200 text-xl">✕</button>
+        </div>
+    </div>
+
+    <!-- Main Dashboard -->
+    <div class="container mx-auto px-4 py-8">
+        <!-- Weather & AI Prediction Widget -->
+        <div class="mb-8 grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div id="weatherWidget" class="weather-widget text-white p-6 rounded-xl shadow-lg cursor-pointer hover:shadow-xl transition-all transform hover:scale-105 relative overflow-hidden">
+                <!-- Animated Sky Background -->
+                <div class="absolute inset-0 opacity-20">
+                    <svg viewBox="0 0 400 200" class="w-full h-full">
+                        <!-- Sky gradient -->
+                        <defs>
+                            <linearGradient id="skyGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                                <stop offset="0%" style="stop-color:#87CEEB;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#98D8E8;stop-opacity:1" />
+                            </linearGradient>
+                        </defs>
+                        <rect width="400" height="200" fill="url(#skyGradient)"/>
+                        
+                        <!-- Animated clouds -->
+                        <g class="animate-pulse">
+                            <ellipse cx="80" cy="60" rx="25" ry="15" fill="white" opacity="0.8"/>
+                            <ellipse cx="95" cy="55" rx="30" ry="18" fill="white" opacity="0.7"/>
+                            <ellipse cx="110" cy="62" rx="20" ry="12" fill="white" opacity="0.8"/>
+                        </g>
+                        
+                        <g class="animate-pulse" style="animation-delay: 1s;">
+                            <ellipse cx="250" cy="80" rx="35" ry="20" fill="white" opacity="0.6"/>
+                            <ellipse cx="270" cy="75" rx="25" ry="15" fill="white" opacity="0.7"/>
+                            <ellipse cx="285" cy="82" rx="28" ry="16" fill="white" opacity="0.6"/>
+                        </g>
+                        
+                        <!-- Sun rays -->
+                        <g class="animate-spin" style="animation-duration: 20s; transform-origin: 320px 40px;">
+                            <line x1="320" y1="20" x2="320" y2="35" stroke="yellow" stroke-width="2" opacity="0.8"/>
+                            <line x1="340" y1="25" x2="335" y2="35" stroke="yellow" stroke-width="2" opacity="0.8"/>
+                            <line x1="345" y1="40" x2="335" y2="40" stroke="yellow" stroke-width="2" opacity="0.8"/>
+                            <line x1="340" y1="55" x2="335" y2="45" stroke="yellow" stroke-width="2" opacity="0.8"/>
+                            <line x1="320" y1="60" x2="320" y2="45" stroke="yellow" stroke-width="2" opacity="0.8"/>
+                            <line x1="300" y1="55" x2="305" y2="45" stroke="yellow" stroke-width="2" opacity="0.8"/>
+                            <line x1="295" y1="40" x2="305" y2="40" stroke="yellow" stroke-width="2" opacity="0.8"/>
+                            <line x1="300" y1="25" x2="305" y2="35" stroke="yellow" stroke-width="2" opacity="0.8"/>
+                        </g>
+                        
+                        <!-- Sun -->
+                        <circle cx="320" cy="40" r="15" fill="yellow" opacity="0.9"/>
+                    </svg>
+                </div>
+                
+                <div class="relative z-10">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <div class="text-2xl mb-2">🌤</div>
+                            <div class="text-lg font-bold">28°C</div>
+                            <div class="text-sm opacity-90">Partly Cloudy</div>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-sm">Humidity: 65%</div>
+                            <div class="text-sm">Wind: 12 km/h</div>
+                        </div>
+                    </div>
+                    <div class="mt-3 text-center">
+                        <div class="text-xs opacity-75">Click for detailed forecast</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="aiPredictionWidget" class="bg-gradient-to-r from-purple-500 to-pink-500 text-white p-6 rounded-xl shadow-lg cursor-pointer hover:shadow-xl transition-all transform hover:scale-105 relative overflow-hidden">
+                <!-- Cute AI Robot Background -->
+                <div class="absolute top-2 right-2 opacity-30">
+                    <svg viewBox="0 0 100 100" class="w-16 h-16">
+                        <!-- Robot head -->
+                        <rect x="25" y="20" width="50" height="40" rx="8" fill="white" opacity="0.8"/>
+                        
+                        <!-- Robot eyes -->
+                        <circle cx="35" cy="35" r="4" fill="#4F46E5" class="animate-pulse"/>
+                        <circle cx="65" cy="35" r="4" fill="#4F46E5" class="animate-pulse" style="animation-delay: 0.5s;"/>
+                        
+                        <!-- Robot mouth -->
+                        <rect x="40" y="45" width="20" height="3" rx="2" fill="#4F46E5" opacity="0.7"/>
+                        
+                        <!-- Robot antennas -->
+                        <line x1="40" y1="20" x2="40" y2="10" stroke="white" stroke-width="2"/>
+                        <line x1="60" y1="20" x2="60" y2="10" stroke="white" stroke-width="2"/>
+                        <circle cx="40" cy="10" r="2" fill="#FFD700" class="animate-bounce"/>
+                        <circle cx="60" cy="10" r="2" fill="#FFD700" class="animate-bounce" style="animation-delay: 0.3s;"/>
+                        
+                        <!-- Robot body -->
+                        <rect x="30" y="60" width="40" height="30" rx="5" fill="white" opacity="0.6"/>
+                        
+                        <!-- Robot arms -->
+                        <rect x="15" y="65" width="15" height="8" rx="4" fill="white" opacity="0.6"/>
+                        <rect x="70" y="65" width="15" height="8" rx="4" fill="white" opacity="0.6"/>
+                        
+                        <!-- Brain waves -->
+                        <g class="animate-pulse" opacity="0.5">
+                            <path d="M 20 30 Q 25 25 30 30 Q 35 35 40 30" stroke="#FFD700" stroke-width="1.5" fill="none"/>
+                            <path d="M 60 30 Q 65 25 70 30 Q 75 35 80 30" stroke="#FFD700" stroke-width="1.5" fill="none"/>
+                        </g>
+                    </svg>
+                </div>
+                
+                <!-- Floating data particles -->
+                <div class="absolute inset-0 opacity-20">
+                    <div class="absolute top-4 left-4 w-1 h-1 bg-white rounded-full animate-ping"></div>
+                    <div class="absolute top-8 right-8 w-1 h-1 bg-white rounded-full animate-ping" style="animation-delay: 1s;"></div>
+                    <div class="absolute bottom-6 left-8 w-1 h-1 bg-white rounded-full animate-ping" style="animation-delay: 2s;"></div>
+                    <div class="absolute bottom-4 right-6 w-1 h-1 bg-white rounded-full animate-ping" style="animation-delay: 0.5s;"></div>
+                </div>
+                
+                <div class="relative z-10">
+                    <div class="text-center">
+                        <div class="text-2xl mb-2">🧠</div>
+                        <div class="text-lg font-bold">AI Prediction</div>
+                        <div class="text-sm opacity-90">Peak crowd at 2:00 PM</div>
+                        <div class="text-xs mt-2">Confidence: 94%</div>
+                    </div>
+                    <div class="mt-3 text-center">
+                        <div class="text-xs opacity-75">Click for detailed analysis</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="liveAnalyticsWidget" class="bg-gradient-to-r from-green-500 to-teal-500 text-white p-6 rounded-xl shadow-lg cursor-pointer hover:shadow-xl transition-all transform hover:scale-105 relative overflow-hidden">
+                <!-- Animated Graph Background -->
+                <div class="absolute inset-0 opacity-20">
+                    <svg viewBox="0 0 200 100" class="w-full h-full">
+                        <!-- Grid lines -->
+                        <defs>
+                            <pattern id="grid" width="20" height="10" patternUnits="userSpaceOnUse">
+                                <path d="M 20 0 L 0 0 0 10" fill="none" stroke="white" stroke-width="0.5" opacity="0.3"/>
+                            </pattern>
+                        </defs>
+                        <rect width="200" height="100" fill="url(#grid)"/>
+                        
+                        <!-- Animated line chart -->
+                        <g class="animate-pulse">
+                            <polyline points="10,80 30,70 50,60 70,45 90,35 110,40 130,30 150,25 170,20 190,15" 
+                                     fill="none" stroke="white" stroke-width="2" opacity="0.8"/>
+                            
+                            <!-- Data points -->
+                            <circle cx="30" cy="70" r="2" fill="white" opacity="0.9" class="animate-ping"/>
+                            <circle cx="70" cy="45" r="2" fill="white" opacity="0.9" class="animate-ping" style="animation-delay: 0.5s;"/>
+                            <circle cx="110" cy="40" r="2" fill="white" opacity="0.9" class="animate-ping" style="animation-delay: 1s;"/>
+                            <circle cx="150" cy="25" r="2" fill="white" opacity="0.9" class="animate-ping" style="animation-delay: 1.5s;"/>
+                        </g>
+                        
+                        <!-- Bar chart -->
+                        <g opacity="0.6">
+                            <rect x="20" y="85" width="8" height="10" fill="white" class="animate-pulse"/>
+                            <rect x="35" y="75" width="8" height="20" fill="white" class="animate-pulse" style="animation-delay: 0.2s;"/>
+                            <rect x="50" y="70" width="8" height="25" fill="white" class="animate-pulse" style="animation-delay: 0.4s;"/>
+                            <rect x="65" y="60" width="8" height="35" fill="white" class="animate-pulse" style="animation-delay: 0.6s;"/>
+                            <rect x="80" y="55" width="8" height="40" fill="white" class="animate-pulse" style="animation-delay: 0.8s;"/>
+                        </g>
+                        
+                        <!-- Trending arrow -->
+                        <g class="animate-bounce" opacity="0.7">
+                            <path d="M 160 40 L 170 30 L 175 35 L 170 30 L 165 35" stroke="white" stroke-width="2" fill="none"/>
+                        </g>
+                    </svg>
+                </div>
+                
+                <!-- Floating analytics icons -->
+                <div class="absolute inset-0 opacity-15">
+                    <div class="absolute top-2 left-2 text-xs animate-pulse">📈</div>
+                    <div class="absolute top-2 right-2 text-xs animate-pulse" style="animation-delay: 1s;">📊</div>
+                    <div class="absolute bottom-2 left-2 text-xs animate-pulse" style="animation-delay: 2s;">💹</div>
+                    <div class="absolute bottom-2 right-2 text-xs animate-pulse" style="animation-delay: 0.5s;">📉</div>
+                </div>
+                
+                <div class="relative z-10">
+                    <div class="text-center">
+                        <div class="text-2xl mb-2">📊</div>
+                        <div class="text-lg font-bold">Live Analytics</div>
+                        <div class="text-sm opacity-90">12,847 visitors today</div>
+                        <div class="text-xs mt-2">↑ 23% from yesterday</div>
+                    </div>
+                    <div class="mt-3 text-center">
+                        <div class="text-xs opacity-75">Click for full dashboard</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Temple Selection -->
+        <div class="mb-8">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6">Select Temple Location</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="temple-card bg-white rounded-xl p-6 shadow-lg cursor-pointer border-2 border-transparent hover:border-blue-500" data-temple="somnath">
+                    <div class="text-center">
+                        <div class="mb-3">
+                            <img src="https://i.pinimg.com/736x/b3/a9/0b/b3a90bf518997ef1c9a6f1a76df58c06.jpg" alt="Somnath Temple" class="w-20 h-20 mx-auto rounded-lg object-cover shadow-md" onerror="this.src=''; this.style.display='none'; this.nextElementSibling.style.display='block';">
+                            <div class="text-4xl hidden">🏛</div>
+                        </div>
+                        <h3 class="font-bold text-lg">Somnath Temple</h3>
+                        <div class="mt-3">
+                            <span class="crowd-indicator low"></span>
+                            <span class="text-sm text-green-600">Low Crowd</span>
+                        </div>
+                        <div class="text-xs text-gray-500 mt-2">Wait: 15 mins</div>
+                    </div>
+                </div>
+                
+                <div class="temple-card bg-white rounded-xl p-6 shadow-lg cursor-pointer border-2 border-transparent hover:border-blue-500" data-temple="dwarka">
+                    <div class="text-center">
+                        <div class="mb-3">
+                            <img src="https://i.pinimg.com/736x/c9/b5/5d/c9b55d5b1dd68580b217de076f6cabf4.jpg" alt="Dwarka Temple" class="w-20 h-20 mx-auto rounded-lg object-cover shadow-md" onerror="this.src=''; this.style.display='none'; this.nextElementSibling.style.display='block';">
+                            <div class="text-4xl hidden">🏰</div>
+                        </div>
+                        <h3 class="font-bold text-lg">Dwarka Temple</h3>
+                        <div class="mt-3">
+                            <span class="crowd-indicator medium"></span>
+                            <span class="text-sm text-yellow-600">Medium Crowd</span>
+                        </div>
+                        <div class="text-xs text-gray-500 mt-2">Wait: 45 mins</div>
+                    </div>
+                </div>
+                
+                <div class="temple-card bg-white rounded-xl p-6 shadow-lg cursor-pointer border-2 border-transparent hover:border-blue-500" data-temple="ambaji">
+                    <div class="text-center">
+                        <div class="mb-3">
+                            <img src="https://i.pinimg.com/736x/60/73/27/607327d4706dba1f487e47833feaeb70.jpg" alt="Ambaji Temple" class="w-20 h-20 mx-auto rounded-lg object-cover shadow-md" onerror="this.src=''; this.style.display='none'; this.nextElementSibling.style.display='block';">
+                            <div class="text-4xl hidden">⛰</div>
+                        </div>
+                        <h3 class="font-bold text-lg">Ambaji Temple</h3>
+                        <div class="mt-3">
+                            <span class="crowd-indicator high"></span>
+                            <span class="text-sm text-red-600">High Crowd</span>
+                        </div>
+                        <div class="text-xs text-gray-500 mt-2">Wait: 2 hours</div>
+                    </div>
+                </div>
+                
+                <div class="temple-card bg-white rounded-xl p-6 shadow-lg cursor-pointer border-2 border-transparent hover:border-blue-500" data-temple="pavagadh">
+                    <div class="text-center">
+                        <div class="mb-3">
+                            <img src="https://i.pinimg.com/736x/a0/84/ec/a084ec22fc734146162e63af9491fe41.jpg" alt="Pavagadh Temple" class="w-20 h-20 mx-auto rounded-lg object-cover shadow-md" onerror="this.src=''; this.style.display='none'; this.nextElementSibling.style.display='block';">
+                            <div class="text-4xl hidden">🏔</div>
+                        </div>
+                        <h3 class="font-bold text-lg">Pavagadh Temple</h3>
+                        <div class="mt-3">
+                            <span class="crowd-indicator medium"></span>
+                            <span class="text-sm text-yellow-600">Medium Crowd</span>
+                        </div>
+                        <div class="text-xs text-gray-500 mt-2">Wait: 30 mins</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Features Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Left Column - Queue Management -->
+            <div class="lg:col-span-2 space-y-6">
+                <!-- AI Crowd Prediction -->
+                <div class="bg-white rounded-xl p-6 shadow-lg">
+                    <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                        <span class="text-2xl mr-3">🤖</span>
+                        AI Crowd Prediction
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="bg-gradient-to-r from-blue-50 to-blue-100 p-4 rounded-lg">
+                            <div class="text-sm text-blue-600 font-semibold">Next 2 Hours</div>
+                            <div class="text-2xl font-bold text-blue-800">↗ Increasing</div>
+                            <div class="text-xs text-blue-600">Festival rush expected</div>
+                        </div>
+                        <div class="bg-gradient-to-r from-green-50 to-green-100 p-4 rounded-lg">
+                            <div class="text-sm text-green-600 font-semibold">Best Visit Time</div>
+                            <div class="text-2xl font-bold text-green-800">6:00 AM</div>
+                            <div class="text-xs text-green-600">Minimal crowd expected</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Crowd Chart -->
+                    <div class="mt-6">
+                        <div class="text-sm font-semibold text-gray-600 mb-3">Today's Crowd Pattern</div>
+                        <div class="flex items-end space-x-2 h-24">
+                            <div class="chart-bar bg-green-400 w-8 rounded-t" style="height: 30%"></div>
+                            <div class="chart-bar bg-green-400 w-8 rounded-t" style="height: 20%"></div>
+                            <div class="chart-bar bg-yellow-400 w-8 rounded-t" style="height: 60%"></div>
+                            <div class="chart-bar bg-red-400 w-8 rounded-t" style="height: 90%"></div>
+                            <div class="chart-bar bg-red-400 w-8 rounded-t" style="height: 100%"></div>
+                            <div class="chart-bar bg-yellow-400 w-8 rounded-t" style="height: 70%"></div>
+                            <div class="chart-bar bg-green-400 w-8 rounded-t" style="height: 40%"></div>
+                        </div>
+                        <div class="flex justify-between text-xs text-gray-500 mt-2">
+                            <span>6AM</span><span>9AM</span><span>12PM</span><span>3PM</span><span>6PM</span><span>9PM</span><span>12AM</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Smart Queue System -->
+                <div class="bg-white rounded-xl p-6 shadow-lg">
+                    <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                        <span class="text-2xl mr-3">🎫</span>
+                        Smart Queue & Ticketing
+                    </h3>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                        <button id="bookDarshanBtn" class="bg-blue-500 hover:bg-blue-600 text-white p-4 rounded-lg font-semibold transition-colors">
+                            📱 Book Digital Darshan Pass
+                        </button>
+                        <button id="checkQueueBtn" class="bg-green-500 hover:bg-green-600 text-white p-4 rounded-lg font-semibold transition-colors">
+                            👥 Check Queue Status
+                        </button>
+                    </div>
+                    
+                    <div id="queueInfo" class="bg-gray-50 p-4 rounded-lg">
+                        <div class="flex justify-between items-center mb-3">
+                            <span class="font-semibold">Current Queue Position:</span>
+                            <span class="text-2xl font-bold text-blue-600">#247</span>
+                        </div>
+                        <div class="flex justify-between items-center mb-3">
+                            <span class="font-semibold">Estimated Wait:</span>
+                            <span class="text-lg font-bold text-orange-600">45 minutes</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2">
+                            <div class="bg-blue-500 h-2 rounded-full" style="width: 35%"></div>
+                        </div>
+                        <div class="text-xs text-gray-500 mt-2">Queue moving at normal pace</div>
+                    </div>
+                </div>
+
+                <!-- ARADHYA Transportation Services -->
+                <div class="bg-white rounded-xl p-6 shadow-lg">
+                    <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                        <span class="text-2xl mr-3">🚗</span>
+                        ARADHYA Transportation
+                    </h3>
+                    
+                    <!-- Parking Status -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                        <div class="text-center p-4 bg-green-50 rounded-lg">
+                            <div class="text-2xl mb-2">🅿</div>
+                            <div class="font-semibold text-green-700">Parking A</div>
+                            <div class="text-sm text-green-600">45 spots free</div>
+                        </div>
+                        <div class="text-center p-4 bg-yellow-50 rounded-lg">
+                            <div class="text-2xl mb-2">🅿</div>
+                            <div class="font-semibold text-yellow-700">Parking B</div>
+                            <div class="text-sm text-yellow-600">12 spots free</div>
+                        </div>
+                        <div class="text-center p-4 bg-red-50 rounded-lg">
+                            <div class="text-2xl mb-2">🅿</div>
+                            <div class="font-semibold text-red-700">Parking C</div>
+                            <div class="text-sm text-red-600">Full</div>
+                        </div>
+                    </div>
+                    
+                    <!-- ARADHYA Transportation Services -->
+                    <div class="space-y-4">
+                        <div class="p-4 bg-blue-50 rounded-lg">
+                            <div class="flex items-center justify-between mb-2">
+                                <div class="flex items-center">
+                                    <div class="text-2xl mr-3">🚌</div>
+                                    <div>
+                                        <div class="font-semibold text-blue-800">ARADHYA Bus Service</div>
+                                        <div class="text-sm text-blue-600">AC buses every 15 minutes • Free for pilgrims</div>
+                                    </div>
+                                </div>
+                                <button id="trackAradhyaBus" class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-2 rounded-lg text-sm transition-colors">
+                                    Track Live
+                                </button>
+                            </div>
+                            <div class="text-xs text-blue-600">Next bus: 8 minutes • Route: Railway Station → Temple → Parking</div>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="p-4 bg-yellow-50 rounded-lg">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center">
+                                        <div class="text-2xl mr-3">🚕</div>
+                                        <div>
+                                            <div class="font-semibold text-yellow-800">Ola Cabs</div>
+                                            <div class="text-sm text-yellow-600">12 cabs nearby</div>
+                                        </div>
+                                    </div>
+                                    <button id="bookOla" class="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-2 rounded-lg text-sm transition-colors">
+                                        Book Now
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="p-4 bg-green-50 rounded-lg">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center">
+                                        <div class="text-2xl mr-3">🚖</div>
+                                        <div>
+                                            <div class="font-semibold text-green-800">Local Cabs</div>
+                                            <div class="text-sm text-green-600">8 available</div>
+                                        </div>
+                                    </div>
+                                    <button id="bookLocalCab" class="bg-green-500 hover:bg-green-600 text-white px-3 py-2 rounded-lg text-sm transition-colors">
+                                        Call Cab
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="p-4 bg-purple-50 rounded-lg">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center">
+                                    <div class="text-2xl mr-3">🛺</div>
+                                    <div>
+                                        <div class="font-semibold text-purple-800">Auto Rickshaw</div>
+                                        <div class="text-sm text-purple-600">Quick local transport • ₹20-50</div>
+                                    </div>
+                                </div>
+                                <button id="callAuto" class="bg-purple-500 hover:bg-purple-600 text-white px-3 py-2 rounded-lg text-sm transition-colors">
+                                    Call Auto
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Transportation Image Gallery -->
+                    <div class="mt-6">
+                        <h4 class="font-semibold text-gray-800 mb-4">🖼 Transportation Services Gallery</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="relative group overflow-hidden rounded-lg shadow-md">
+                                <img src="YOUR_BUS_IMAGE_URL_HERE" alt="ARADHYA Bus Service" class="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105" onerror="this.src=''; this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                <div class="w-full h-48 bg-gradient-to-br from-blue-400 to-blue-600 hidden items-center justify-center text-white">
+                                    <div class="text-center">
+                                        <div class="text-4xl mb-2">🚌</div>
+                                        <div class="font-bold">ARADHYA Bus Service</div>
+                                        <div class="text-sm opacity-90">Free AC buses every 15 minutes</div>
+                                    </div>
+                                </div>
+                                <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-4">
+                                    <div class="text-white font-semibold">ARADHYA Bus Service</div>
+                                    <div class="text-white text-sm opacity-90">Free AC buses • Every 15 minutes</div>
+                                </div>
+                            </div>
+                            
+                            <div class="relative group overflow-hidden rounded-lg shadow-md">
+                                <img src="YOUR_PARKING_IMAGE_URL_HERE" alt="Smart Parking System" class="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105" onerror="this.src=''; this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                <div class="w-full h-48 bg-gradient-to-br from-green-400 to-green-600 hidden items-center justify-center text-white">
+                                    <div class="text-center">
+                                        <div class="text-4xl mb-2">🅿</div>
+                                        <div class="font-bold">Smart Parking</div>
+                                        <div class="text-sm opacity-90">Real-time availability tracking</div>
+                                    </div>
+                                </div>
+                                <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-4">
+                                    <div class="text-white font-semibold">Smart Parking System</div>
+                                    <div class="text-white text-sm opacity-90">Real-time availability • 3 zones</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+                            <div class="relative group overflow-hidden rounded-lg shadow-md">
+                                <img src="YOUR_TAXI_IMAGE_URL_HERE" alt="Taxi Services" class="w-full h-32 object-cover transition-transform duration-300 group-hover:scale-105" onerror="this.src=''; this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                <div class="w-full h-32 bg-gradient-to-br from-yellow-400 to-yellow-600 hidden items-center justify-center text-white">
+                                    <div class="text-center">
+                                        <div class="text-2xl mb-1">🚕</div>
+                                        <div class="font-bold text-sm">Taxi Services</div>
+                                    </div>
+                                </div>
+                                <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-2">
+                                    <div class="text-white text-sm font-semibold">Taxi Services</div>
+                                </div>
+                            </div>
+                            
+                            <div class="relative group overflow-hidden rounded-lg shadow-md">
+                                <img src="YOUR_AUTO_IMAGE_URL_HERE" alt="Auto Rickshaw" class="w-full h-32 object-cover transition-transform duration-300 group-hover:scale-105" onerror="this.src=''; this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                <div class="w-full h-32 bg-gradient-to-br from-purple-400 to-purple-600 hidden items-center justify-center text-white">
+                                    <div class="text-center">
+                                        <div class="text-2xl mb-1">🛺</div>
+                                        <div class="font-bold text-sm">Auto Rickshaw</div>
+                                    </div>
+                                </div>
+                                <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-2">
+                                    <div class="text-white text-sm font-semibold">Auto Rickshaw</div>
+                                </div>
+                            </div>
+                            
+                            <div class="relative group overflow-hidden rounded-lg shadow-md">
+                                <img src="YOUR_SHUTTLE_IMAGE_URL_HERE" alt="Shuttle Service" class="w-full h-32 object-cover transition-transform duration-300 group-hover:scale-105" onerror="this.src=''; this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                <div class="w-full h-32 bg-gradient-to-br from-teal-400 to-teal-600 hidden items-center justify-center text-white">
+                                    <div class="text-center">
+                                        <div class="text-2xl mb-1">🚐</div>
+                                        <div class="font-bold text-sm">Shuttle Service</div>
+                                    </div>
+                                </div>
+                                <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-2">
+                                    <div class="text-white text-sm font-semibold">Shuttle Service</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column - Monitoring & Services -->
+            <div class="space-y-6">
+                <!-- IoT Monitoring -->
+                <div class="bg-white rounded-xl p-6 shadow-lg">
+                    <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                        <span class="text-2xl mr-3">📡</span>
+                        Live Monitoring
+                    </h3>
+                    
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between p-3 bg-green-50 rounded-lg">
+                            <div class="flex items-center">
+                                <span class="pulse-dot w-3 h-3 bg-green-500 rounded-full mr-3"></span>
+                                <span class="font-semibold">Main Gate</span>
+                            </div>
+                            <span class="text-green-600 font-bold">Normal</span>
+                        </div>
+                        
+                        <div class="flex items-center justify-between p-3 bg-yellow-50 rounded-lg">
+                            <div class="flex items-center">
+                                <span class="pulse-dot w-3 h-3 bg-yellow-500 rounded-full mr-3"></span>
+                                <span class="font-semibold">Darshan Hall</span>
+                            </div>
+                            <span class="text-yellow-600 font-bold">Moderate</span>
+                        </div>
+                        
+                        <div class="flex items-center justify-between p-3 bg-red-50 rounded-lg">
+                            <div class="flex items-center">
+                                <span class="pulse-dot w-3 h-3 bg-red-500 rounded-full mr-3"></span>
+                                <span class="font-semibold">Exit Area</span>
+                            </div>
+                            <span class="text-red-600 font-bold">Crowded</span>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4 p-3 bg-blue-50 rounded-lg">
+                        <div class="text-sm font-semibold text-blue-800">🎥 AI Camera Analysis</div>
+                        <div class="text-xs text-blue-600 mt-1">24 cameras active • Face mask detection ON</div>
+                    </div>
+                </div>
+
+                <!-- Emergency Services -->
+                <div class="bg-white rounded-xl p-6 shadow-lg">
+                    <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                        <span class="text-2xl mr-3">🚑</span>
+                        Emergency Services
+                    </h3>
+                    
+                    <div class="space-y-3">
+                        <button class="w-full bg-red-500 hover:bg-red-600 text-white p-3 rounded-lg font-semibold transition-colors">
+                            🚨 Report Emergency
+                        </button>
+                        
+                        <div class="grid grid-cols-2 gap-3">
+                            <button class="bg-blue-500 hover:bg-blue-600 text-white p-3 rounded-lg text-sm transition-colors">
+                                👮 Security
+                            </button>
+                            <button class="bg-green-500 hover:bg-green-600 text-white p-3 rounded-lg text-sm transition-colors">
+                                🏥 Medical
+                            </button>
+                        </div>
+                        
+                        <!-- Emergency Crowd Control Panel -->
+                        <div id="emergencyControlPanel" class="hidden emergency-protocol p-4 rounded-lg text-white">
+                            <div class="text-center mb-3">
+                                <div class="text-lg font-bold">🚨 CROWD SURGE PROTOCOL ACTIVE</div>
+                                <div class="text-xs">Capacity: <span id="currentCapacity">127%</span> | Status: CRITICAL</div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-2 text-xs">
+                                <button id="stopEntryBtn" class="bg-red-700 hover:bg-red-800 p-2 rounded transition-colors">
+                                    🚫 Stop New Entry
+                                </button>
+                                <button id="openExitsBtn" class="bg-orange-600 hover:bg-orange-700 p-2 rounded transition-colors">
+                                    🚪 Open All Exits
+                                </button>
+                                <button id="alertSecurityBtn" class="bg-blue-600 hover:bg-blue-700 p-2 rounded transition-colors">
+                                    👮 Alert Security
+                                </button>
+                                <button id="medicalStandbyBtn" class="bg-green-600 hover:bg-green-700 p-2 rounded transition-colors">
+                                    🏥 Medical Standby
+                                </button>
+                            </div>
+                            <div class="mt-3 text-xs text-center">
+                                <div>Auto-actions: Entry stopped, Exits opened, Security alerted</div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-gray-50 p-3 rounded-lg">
+                            <div class="text-sm font-semibold text-gray-700">Medical Stations</div>
+                            <div class="text-xs text-gray-600 mt-1">
+                                • Main Gate: 2 doctors available<br>
+                                • Temple Complex: 1 nurse on duty<br>
+                                • Parking Area: First aid kit
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Accessibility Features -->
+                <div class="bg-white rounded-xl p-6 shadow-lg">
+                    <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                        <span class="text-2xl mr-3">♿</span>
+                        Accessibility
+                    </h3>
+                    
+                    <div class="space-y-3">
+                        <button class="w-full bg-purple-500 hover:bg-purple-600 text-white p-3 rounded-lg font-semibold transition-colors">
+                            🦽 Priority Queue Access
+                        </button>
+                        
+                        <button class="w-full bg-indigo-500 hover:bg-indigo-600 text-white p-3 rounded-lg font-semibold transition-colors">
+                            🗣 Audio Navigation
+                        </button>
+                        
+                        <div class="bg-purple-50 p-3 rounded-lg">
+                            <div class="text-sm font-semibold text-purple-800">Available Services</div>
+                            <div class="text-xs text-purple-600 mt-1">
+                                • Wheelchair assistance<br>
+                                • Sign language interpreter<br>
+                                • Large print guides<br>
+                                • Dedicated parking spots
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CCTV Sensor Monitoring -->
+                <div class="bg-white rounded-xl p-6 shadow-lg">
+                    <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                        <span class="text-2xl mr-3">📹</span>
+                        CCTV Sensor Network
+                    </h3>
+                    
+                    <div class="space-y-3">
+                        <div class="bg-blue-50 p-4 rounded-lg">
+                            <div class="flex items-center justify-between mb-2">
+                                <div class="text-sm font-semibold text-blue-800">Live Camera Feeds</div>
+                                <div class="text-xs text-blue-600">24 Active</div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-2 text-xs">
+                                <div class="flex items-center">
+                                    <span class="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"></span>
+                                    <span>Main Gate (4K)</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <span class="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"></span>
+                                    <span>Darshan Hall (360°)</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <span class="w-2 h-2 bg-yellow-500 rounded-full mr-2 animate-pulse"></span>
+                                    <span>Queue Area (Thermal)</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <span class="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"></span>
+                                    <span>Parking (Night Vision)</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="grid grid-cols-2 gap-3">
+                            <button id="viewCCTVFeeds" class="bg-blue-500 hover:bg-blue-600 text-white p-3 rounded-lg text-sm transition-colors">
+                                📺 Live Feeds
+                            </button>
+                            <button id="aiAnalysis" class="bg-purple-500 hover:bg-purple-600 text-white p-3 rounded-lg text-sm transition-colors">
+                                🧠 AI Analysis
+                            </button>
+                        </div>
+                        
+                        <div class="bg-gray-50 p-3 rounded-lg">
+                            <div class="text-sm font-semibold text-gray-700 mb-2">AI Detection Status</div>
+                            <div class="space-y-1 text-xs text-gray-600">
+                                <div class="flex justify-between">
+                                    <span>• Crowd Density Analysis</span>
+                                    <span class="text-green-600">✓ Active</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span>• Face Mask Detection</span>
+                                    <span class="text-green-600">✓ Active</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span>• Suspicious Activity Alert</span>
+                                    <span class="text-green-600">✓ Active</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span>• Emergency Detection</span>
+                                    <span class="text-green-600">✓ Active</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Drone Management System -->
+                <div class="bg-white rounded-xl p-6 shadow-lg">
+                    <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                        <span class="text-2xl mr-3">🚁</span>
+                        Drone Management
+                    </h3>
+                    
+                    <div class="space-y-3">
+                        <div class="bg-green-50 p-4 rounded-lg">
+                            <div class="flex items-center justify-between mb-2">
+                                <div class="text-sm font-semibold text-green-800">Active Drones</div>
+                                <div class="text-xs text-green-600">3 Deployed</div>
+                            </div>
+                            <div class="space-y-2">
+                                <div class="flex items-center justify-between text-xs">
+                                    <div class="flex items-center">
+                                        <span class="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"></span>
+                                        <span>Drone Alpha - Perimeter Patrol</span>
+                                    </div>
+                                    <span class="text-green-600">Battery: 87%</span>
+                                </div>
+                                <div class="flex items-center justify-between text-xs">
+                                    <div class="flex items-center">
+                                        <span class="w-2 h-2 bg-blue-500 rounded-full mr-2 animate-pulse"></span>
+                                        <span>Drone Beta - Crowd Monitoring</span>
+                                    </div>
+                                    <span class="text-blue-600">Battery: 92%</span>
+                                </div>
+                                <div class="flex items-center justify-between text-xs">
+                                    <div class="flex items-center">
+                                        <span class="w-2 h-2 bg-orange-500 rounded-full mr-2 animate-pulse"></span>
+                                        <span>Drone Gamma - Emergency Standby</span>
+                                    </div>
+                                    <span class="text-orange-600">Battery: 95%</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="grid grid-cols-2 gap-3">
+                            <button id="deployDrone" class="bg-green-500 hover:bg-green-600 text-white p-3 rounded-lg text-sm transition-colors">
+                                🚁 Deploy Drone
+                            </button>
+                            <button id="droneFeeds" class="bg-blue-500 hover:bg-blue-600 text-white p-3 rounded-lg text-sm transition-colors">
+                                📡 Live Feeds
+                            </button>
+                        </div>
+                        
+                        <div class="bg-purple-50 p-3 rounded-lg">
+                            <div class="text-sm font-semibold text-purple-800 mb-2">Drone Capabilities</div>
+                            <div class="space-y-1 text-xs text-purple-700">
+                                <div>• 4K aerial surveillance & recording</div>
+                                <div>• Real-time crowd density mapping</div>
+                                <div>• Emergency response coordination</div>
+                                <div>• Traffic pattern analysis</div>
+                                <div>• Lost person search assistance</div>
+                                <div>• Weather monitoring sensors</div>
+                            </div>
+                        </div>
+                        
+                        <button id="emergencyDroneDispatch" class="w-full bg-red-500 hover:bg-red-600 text-white p-3 rounded-lg font-semibold transition-colors">
+                            🚨 Emergency Dispatch
+                        </button>
+                        
+                        <!-- Drone Management Image Gallery -->
+                        <div class="mt-6">
+                            <h4 class="font-semibold text-gray-800 mb-4">🖼 Drone Operations Gallery</h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="relative group overflow-hidden rounded-lg shadow-md">
+                                    <img src="YOUR_DRONE_AERIAL_VIEW_URL_HERE" alt="Aerial Temple View" class="w-full h-40 object-cover transition-transform duration-300 group-hover:scale-105" onerror="this.src=''; this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                    <div class="w-full h-40 bg-gradient-to-br from-blue-500 to-purple-600 hidden items-center justify-center text-white">
+                                        <div class="text-center">
+                                            <div class="text-3xl mb-2">🚁</div>
+                                            <div class="font-bold">Aerial Temple View</div>
+                                            <div class="text-sm opacity-90">4K surveillance footage</div>
+                                        </div>
+                                    </div>
+                                    <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-3">
+                                        <div class="text-white font-semibold">Aerial Temple View</div>
+                                        <div class="text-white text-sm opacity-90">4K surveillance • Real-time</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="relative group overflow-hidden rounded-lg shadow-md">
+                                    <img src="YOUR_DRONE_FLEET_URL_HERE" alt="Drone Fleet" class="w-full h-40 object-cover transition-transform duration-300 group-hover:scale-105" onerror="this.src=''; this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                    <div class="w-full h-40 bg-gradient-to-br from-green-500 to-teal-600 hidden items-center justify-center text-white">
+                                        <div class="text-center">
+                                            <div class="text-3xl mb-2">🚁</div>
+                                            <div class="font-bold">Drone Fleet</div>
+                                            <div class="text-sm opacity-90">5 active drones</div>
+                                        </div>
+                                    </div>
+                                    <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-3">
+                                        <div class="text-white font-semibold">Drone Fleet Management</div>
+                                        <div class="text-white text-sm opacity-90">5 drones • Multi-mission capable</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+                                <div class="relative group overflow-hidden rounded-lg shadow-md">
+                                    <img src="YOUR_DRONE_CONTROL_URL_HERE" alt="Control Center" class="w-full h-28 object-cover transition-transform duration-300 group-hover:scale-105" onerror="this.src=''; this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                    <div class="w-full h-28 bg-gradient-to-br from-gray-600 to-gray-800 hidden items-center justify-center text-white">
+                                        <div class="text-center">
+                                            <div class="text-xl mb-1">🎮</div>
+                                            <div class="font-bold text-sm">Control Center</div>
+                                        </div>
+                                    </div>
+                                    <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-2">
+                                        <div class="text-white text-xs font-semibold">Control Center</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="relative group overflow-hidden rounded-lg shadow-md">
+                                    <img src="YOUR_THERMAL_DRONE_URL_HERE" alt="Thermal Imaging" class="w-full h-28 object-cover transition-transform duration-300 group-hover:scale-105" onerror="this.src=''; this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                    <div class="w-full h-28 bg-gradient-to-br from-red-500 to-orange-600 hidden items-center justify-center text-white">
+                                        <div class="text-center">
+                                            <div class="text-xl mb-1">🌡</div>
+                                            <div class="font-bold text-sm">Thermal Imaging</div>
+                                        </div>
+                                    </div>
+                                    <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-2">
+                                        <div class="text-white text-xs font-semibold">Thermal Imaging</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="relative group overflow-hidden rounded-lg shadow-md">
+                                    <img src="YOUR_NIGHT_DRONE_URL_HERE" alt="Night Vision" class="w-full h-28 object-cover transition-transform duration-300 group-hover:scale-105" onerror="this.src=''; this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                    <div class="w-full h-28 bg-gradient-to-br from-indigo-600 to-purple-700 hidden items-center justify-center text-white">
+                                        <div class="text-center">
+                                            <div class="text-xl mb-1">🌙</div>
+                                            <div class="font-bold text-sm">Night Vision</div>
+                                        </div>
